@@ -18,3 +18,9 @@
     <img src="https://img.shields.io/twitter/follow/theappjam?style=social" alt="Follow @theappjam" />
   </a>
 </p>
+
+## Contributing to Budibase
+From opening a bug report to creating a pull request: every contribution is appreciated and welcomed. If you'd like to contribute, start by reading our [Contribution Guide](CONTRIBUTING.md)
+
+## License
+AppJam is open-source and released under the GNU Affero General Public License v3.0.
