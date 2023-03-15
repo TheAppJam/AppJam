@@ -21,7 +21,7 @@ function signup(email, name, password) {
   };
 
   return fetch(`${config.url.API_URL}/signup`, requestOptions).then(handleResponse).then((data) => {
-    data.text().then((value) => {
+    return data.text().then((value) => {
       const user = JSON.parse(value);
       updateUser(user)
       return user
@@ -36,7 +36,7 @@ function login(email, password) {
     body: JSON.stringify({ email, password }),
   };
   return fetch(`${config.url.API_URL}/login`, requestOptions).then(handleResponse).then((data) => {
-    data.text().then((value) => {
+    return data.text().then((value) => {
       const user = JSON.parse(value);
       updateUser(user)
       return user
