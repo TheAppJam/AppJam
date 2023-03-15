@@ -426,6 +426,9 @@ function Editor(props) {
       style={{ width: "150px", maxWidth: "390px" }}>
       <Popover.Body style={{ padding: "10px 0.5rem" }}>
         {online && <QRCodeSVG value={url} />}
+        <div style={{fontSize: '12px', marginTop: '5px'}}>
+          Download <a style={{textDecoration: 'underline'}} href="https://expo.dev/client" target="_blank">Expo Go</a> to Preview.
+        </div>
         {online && <div
           style={{
             backgroundColor: "rgba(78, 60, 240, 0.1)",
