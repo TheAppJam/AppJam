@@ -1,0 +1,60 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@uiw/react-codemirror": "^3.0.6",
+    "bootstrap": "^5.2.3",
+    "deep-object-diff": "^1.1.9",
+    "history": "^5.3.0",
+    "immutability-helper": "^3.1.1",
+    "lodash": "^4.17.21",
+    "qrcode.react": "^3.1.0",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.7.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.7.1",
+    "react-native-vector-icons": "^9.2.0",
+    "react-native-web": "^0.18.12",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "5.0.1",
+    "react-virtuoso": "^4.0.2",
+    "rxjs": "^7.8.0",
+    "snack-sdk": "^3.9.0",
+    "uuid": "^8.3.2",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "PORT=3001 react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "react-app-rewired": "^2.2.1",
+    "sass": "^1.54.9"
+  }
+}

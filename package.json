@@ -1,0 +1,7 @@
+{
+  "name": "appjam",
+  "scripts": {
+    "build:server": "NODE_ENV=production npm --prefix server run build",
+    "start:prod": "npm --prefix server run start:prod"
+  }
+}
