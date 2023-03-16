@@ -19,7 +19,7 @@
   </a>
 </p>
 
-## Contributing to Budibase
+## Contributing to AppJam
 From opening a bug report to creating a pull request: every contribution is appreciated and welcomed. If you'd like to contribute, start by reading our [Contribution Guide](CONTRIBUTING.md)
 
 ## License
