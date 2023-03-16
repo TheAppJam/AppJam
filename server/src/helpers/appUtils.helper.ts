@@ -157,7 +157,7 @@ const ${query.name} = () => {
       }
     }
   }))
-  fetch(resolveUrl(\`${query.options.url}\`, route), requestOptions).then((data) => {
+  fetch(resolveUrl(\`${query.options.url}\`, route, store), requestOptions).then((data) => {
     data.text().then((value) => {
       const finalResult = JSON.parse(value);
       setStore((store) => ({
@@ -185,7 +185,7 @@ const generateTemplate = (screenFunction, stackFunction ,imports) => {
   function CustomTextInput({defaultValue, handleTextInputChange, componentName, placeholder}) {
     useEffect(() => {
     handleTextInputChange(componentName,defaultValue)
-    }, [])
+    }, [defaultValue])
     return (
       <TextInput
         style={{borderWidth: 1, padding: 10}}
@@ -349,20 +349,20 @@ const generateScreens = (screensOption) => {
         return matchedParams;
       }
 
-      const resolveParamVar = (code, route, isJsCode) => {
+      const resolveParamVar = (code, route, store, isJsCode) => {
         let result = "";
         code = code.replace(/[{()}]/g, '');
-        const evalFunction = Function(["route"], \` return \${code || ""} \`);
-        result = evalFunction(isJsCode ? route : undefined);
+        const evalFunction = Function(["route", "store"], \` return \${code || ""} \`);
+        result = evalFunction(isJsCode ? route : undefined, isJsCode ? store : undefined);
     
         return result;
     }
     
-      const resolveUrl = (url, route) => {
+      const resolveUrl = (url, route, store) => {
         const containsVar = getDynamicVariables(url)
         if (!containsVar) return url
         for (const dynamicVariable of containsVar) {
-            value = resolveParamVar(dynamicVariable, route, true);
+            value = resolveParamVar(dynamicVariable, route, store, true);
             if (typeof value !== 'function') {
               url = url.replace(dynamicVariable, \`\${value}\`);
             }
@@ -450,7 +450,7 @@ export function buildTemplate(config) {
 
   const currentDir = path.resolve(process.cwd());
 
-  // fs.writeFileSync(`${currentDir}/App.js`, prettier.format(template));
+  fs.writeFileSync(`${currentDir}/App.js`, prettier.format(template));
   // fs.writeFileSync(`${currentDir}/app.json`, prettier.format(appJson, {parser: "json"}));
   return template;
 }

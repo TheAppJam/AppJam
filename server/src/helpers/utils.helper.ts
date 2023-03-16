@@ -21,7 +21,7 @@ export function buildApp(config) {
   ls.stdout.on('data', (data) => {
     console.log(`stdout: ${data.toString()}`);
     if (data.toString().includes("Build details: ")) {
-      console.log('yahan aaya he nhi')
+
     }
   });
   

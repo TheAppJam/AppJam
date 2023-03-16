@@ -97,7 +97,7 @@ function Editor(props) {
     return comps;
   };
 
-  const totalComponents = numberOfComponent(boxes.screens[currentScreenId].components || []);
+  const totalComponents = numberOfComponent(boxes?.screens[currentScreenId]?.components || []);
 
   const [snack] = useState(
     () =>
@@ -252,7 +252,7 @@ function Editor(props) {
   }, []);
 
   const parentAppOrderChanged = (newBoxes) => {
-    if (isEqual(boxes.screens[currentScreenId].components, newBoxes)) return;
+    if (isEqual(boxes.screens[currentScreenId]?.components, newBoxes)) return;
     const newAppOrder = _.cloneDeep(boxes);
     newAppOrder.screens[currentScreenId].components = newBoxes
     setBoxes(newAppOrder);
@@ -366,7 +366,7 @@ function Editor(props) {
 
   const removeComponent = (id) => {
     setSelectedComponent(null);
-    const newBoxes = cloneDeep(boxes.screens[currentScreenId].components);
+    const newBoxes = cloneDeep(boxes.screens[currentScreenId]?.components);
     const newDefinition = { ...appDefinition.screens[currentScreenId].components };
     deleteNestedComponents(id, newBoxes, newDefinition);
     parentAppOrderChanged(newBoxes);
@@ -621,7 +621,7 @@ function Editor(props) {
               </div>
               <ComponentTree
                 setSelectedComponent={setSelectedComponent}
-                boxes={boxes.screens[currentScreenId].components}
+                boxes={boxes.screens[currentScreenId]?.components}
                 appDefinition={
                   appDefinition.screens[currentScreenId].components
                 }
@@ -681,7 +681,7 @@ function Editor(props) {
                           hoveredComponent={hoveredComponent}
                           parentAppOrderChanged={parentAppOrderChanged}
                           parentDefinitionChanged={parentDefinitionChanged}
-                          order={boxes.screens[currentScreenId].components}
+                          order={boxes.screens[currentScreenId]?.components}
                           definition={
                             appDefinition.screens[currentScreenId].components
                           }

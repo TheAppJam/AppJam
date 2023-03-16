@@ -50,25 +50,29 @@ const QueryManager = ({
   };
 
   const handleHeaderChange = (value, id, index) => {
-    let newOptions;
-    if (!options["headers"]) {
-      newOptions = { ...options, headers: [[]] };
-    } else {
-      newOptions = { ...options };
-    }
-    newOptions["headers"][index][id] = value;
-    setOptions(newOptions);
+    setOptions((options) => {
+      let newOptions;
+      if (!options["headers"]) {
+        newOptions = { ...options, headers: [[]] };
+      } else {
+        newOptions = { ...options };
+      }
+      newOptions["headers"][index][id] = value;
+      return newOptions
+    })
   };
 
   const handleBodyChange = (value, id, index) => {
-    let newOptions;
-    if (!options["body"]) {
-      newOptions = { ...options, body: [[]] };
-    } else {
-      newOptions = { ...options };
-    }
-    newOptions["body"][index][id] = value;
-    setOptions(newOptions);
+    setOptions((options) => {
+      let newOptions;
+      if (!options["body"]) {
+        newOptions = { ...options, body: [[]] };
+      } else {
+        newOptions = { ...options };
+      }
+      newOptions["body"][index][id] = value;
+      return newOptions
+    });
   };
 
   const handleChange = (e) => {
@@ -198,7 +202,7 @@ const QueryManager = ({
             value={name}
           />
           <select
-            value={options.method || ""}
+            value={options.method || "get"}
             onChange={handleMethodChange}
           >
             <option value={'get'}>
@@ -206,6 +210,9 @@ const QueryManager = ({
             </option>
             <option value={'post'}>
               POST
+            </option>
+            <option value={'put'}>
+              PUT
             </option>
           </select>
           <input

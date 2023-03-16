@@ -151,6 +151,7 @@ const EventManager = ({
                 const value = event.target.value;
                 handleSelectionChange(i, [{ param: "modal", value: value }]);
               }}>
+              <option hidden>Choose</option>
               {getModalOptions().map((modal, i) => {
                 return (
                   <option

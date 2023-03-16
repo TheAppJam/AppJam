@@ -25,7 +25,7 @@ function CustomTextInput({
 }) {
   useEffect(() => {
     handleTextInputChange(componentName, defaultValue);
-  }, []);
+  }, [defaultValue]);
   return (
     <TextInput
       style={{ borderWidth: 1, padding: 10 }}
@@ -41,25 +41,29 @@ function HomeScreen({ route, navigation }) {
   const defaultStore = {
     queries: {},
     components: {
-      listview1: { id: "64d4c492-e162-43c2-abdb-245339525676" },
-      container1: { id: "40271892-3dc8-4c10-8d6b-19771d0b3ff7" },
-      text1: { id: "da713c53-ddd8-4124-90d4-2f24b259e0f0" },
+      listview1: { id: "3af316bc-69ad-46a3-9211-ee055c1a4092" },
+      container1: { id: "5371edc6-bdad-4a1a-9c39-eb25e547d0b6" },
+      text1: { id: "f167e11d-dfb7-4690-9805-a85b65bc5c5d" },
+      modal1: { show: false, id: "0e17d030-ec20-448f-ac57-b6b27f11df1e" },
+      textinput1: {
+        value: "{{variables.selectedItem.name}}",
+        id: "0a648286-2da8-4dc3-b640-7feb1b25653b",
+      },
+      button1: { id: "fa31b895-363c-4e32-8909-926e5aa4cbfe" },
     },
     variables: {},
   };
   const [store, setStore] = useState(defaultStore);
 
   useEffect(() => {
-    airtable();
+    getAllUsers();
   }, []);
 
-  const airtable2 = () => {
+  const change_name = () => {
     let requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization:
-          "Bearer pat4YAtajn9F3yPPE.170024a050b69a38096ed9710577c07ef57d456ccf24290a4921ac7c24c5eb5b",
-      },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: '{"name":"store?.components?.textinput1?.value"}',
     };
     if (requestOptions.method !== "GET") {
       requestOptions = resolveRequest(requestOptions);
@@ -68,7 +72,7 @@ function HomeScreen({ route, navigation }) {
       ...store,
       queries: {
         ...store.queries,
-        ["airtable2"]: {
+        ["change_name"]: {
           isLoading: true,
           data: [],
         },
@@ -76,8 +80,9 @@ function HomeScreen({ route, navigation }) {
     }));
     fetch(
       resolveUrl(
-        `https://api.airtable.com/v0/appNWiL392zUHROpb/Opportunities/recBGlINojXAMUbKn`,
-        route
+        `https://63bba00f32d17a509093eebc.mockapi.io/api/v1/users/{store?.variables?.selectedItem?.id}`,
+        route,
+        store
       ),
       requestOptions
     ).then((data) => {
@@ -87,8 +92,8 @@ function HomeScreen({ route, navigation }) {
           ...store,
           queries: {
             ...store.queries,
-            ["airtable2"]: {
-              ...store.queries["airtable2"],
+            ["change_name"]: {
+              ...store.queries["change_name"],
               data: finalResult,
               isLoading: false,
             },
@@ -98,14 +103,8 @@ function HomeScreen({ route, navigation }) {
     });
   };
 
-  const airtable1 = () => {
-    let requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization:
-          "Bearer pat4YAtajn9F3yPPE.170024a050b69a38096ed9710577c07ef57d456ccf24290a4921ac7c24c5eb5b",
-      },
-    };
+  const getAllUsers = () => {
+    let requestOptions = { method: "GET", headers: {} };
     if (requestOptions.method !== "GET") {
       requestOptions = resolveRequest(requestOptions);
     }
@@ -113,7 +112,7 @@ function HomeScreen({ route, navigation }) {
       ...store,
       queries: {
         ...store.queries,
-        ["airtable1"]: {
+        ["getAllUsers"]: {
           isLoading: true,
           data: [],
         },
@@ -121,8 +120,9 @@ function HomeScreen({ route, navigation }) {
     }));
     fetch(
       resolveUrl(
-        `https://api.airtable.com/v0/appNWiL392zUHROpb/Opportunities/{route?.params?.id}`,
-        route
+        `https://63bba00f32d17a509093eebc.mockapi.io/users`,
+        route,
+        store
       ),
       requestOptions
     ).then((data) => {
@@ -132,8 +132,8 @@ function HomeScreen({ route, navigation }) {
           ...store,
           queries: {
             ...store.queries,
-            ["airtable1"]: {
-              ...store.queries["airtable1"],
+            ["getAllUsers"]: {
+              ...store.queries["getAllUsers"],
               data: finalResult,
               isLoading: false,
             },
@@ -143,13 +143,11 @@ function HomeScreen({ route, navigation }) {
     });
   };
 
-  const airtable = () => {
+  const second_api = () => {
     let requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization:
-          "Bearer pat4YAtajn9F3yPPE.170024a050b69a38096ed9710577c07ef57d456ccf24290a4921ac7c24c5eb5b",
-      },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: '{"name":"store?.components?.textinput1?.value"}',
     };
     if (requestOptions.method !== "GET") {
       requestOptions = resolveRequest(requestOptions);
@@ -158,7 +156,7 @@ function HomeScreen({ route, navigation }) {
       ...store,
       queries: {
         ...store.queries,
-        ["airtable"]: {
+        ["second_api"]: {
           isLoading: true,
           data: [],
         },
@@ -166,8 +164,9 @@ function HomeScreen({ route, navigation }) {
     }));
     fetch(
       resolveUrl(
-        `https://api.airtable.com/v0/appNWiL392zUHROpb/Opportunities`,
-        route
+        `https://63bba00f32d17a509093eebc.mockapi.io/api/v1/users/1`,
+        route,
+        store
       ),
       requestOptions
     ).then((data) => {
@@ -177,8 +176,8 @@ function HomeScreen({ route, navigation }) {
           ...store,
           queries: {
             ...store.queries,
-            ["airtable"]: {
-              ...store.queries["airtable"],
+            ["second_api"]: {
+              ...store.queries["second_api"],
               data: finalResult,
               isLoading: false,
             },
@@ -224,30 +223,27 @@ function HomeScreen({ route, navigation }) {
     return matchedParams;
   }
 
-  const resolveParamVar = (code, route, isJsCode) => {
-    console.log(route);
-    console.log(code);
+  const resolveParamVar = (code, route, store, isJsCode) => {
     let result = "";
     code = code.replace(/[{()}]/g, "");
-    const evalFunction = Function(["route"], ` return ${code || ""} `);
-    console.log(evalFunction);
-    result = evalFunction(isJsCode ? route : undefined);
+    const evalFunction = Function(["route", "store"], ` return ${code || ""} `);
+    result = evalFunction(
+      isJsCode ? route : undefined,
+      isJsCode ? store : undefined
+    );
 
     return result;
   };
 
-  const resolveUrl = (url, route) => {
+  const resolveUrl = (url, route, store) => {
     const containsVar = getDynamicVariables(url);
-    console.log(url);
     if (!containsVar) return url;
     for (const dynamicVariable of containsVar) {
-      value = resolveParamVar(dynamicVariable, route, true);
-      console.log(value, "value");
+      value = resolveParamVar(dynamicVariable, route, store, true);
       if (typeof value !== "function") {
         url = url.replace(dynamicVariable, `${value}`);
       }
     }
-    console.log(url);
     return url;
   };
 
@@ -277,15 +273,14 @@ function HomeScreen({ route, navigation }) {
     <SafeAreaView style={styles.container}>
       <ScrollView style={{ paddingHorizontal: 20 }}>
         <FlatList
-          data={store?.queries?.airtable?.data?.records}
+          data={store?.queries?.getAllUsers?.data?.value}
           renderItem={({ item }) => {
             return (
               <>
                 <Pressable
                   onPress={() => {
-                    navigation.navigate("Users", {
-                      id: item.id,
-                    });
+                    changeStore("modal1", "show", true);
+                    changeStoreVariable("selectedItem", item);
                   }}
                 >
                   <View
@@ -304,7 +299,7 @@ function HomeScreen({ route, navigation }) {
                       elevation: 2,
                     }}
                   >
-                    {item.fields["Opportunity name"] && (
+                    {item.name && (
                       <Text
                         style={{
                           margin: 20,
@@ -314,7 +309,7 @@ function HomeScreen({ route, navigation }) {
                           fontWeight: "normal",
                         }}
                       >
-                        {item.fields["Opportunity name"]}
+                        {item.name}
                       </Text>
                     )}
                   </View>
@@ -323,280 +318,45 @@ function HomeScreen({ route, navigation }) {
             );
           }}
         />
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-
-function UsersScreen({ route, navigation }) {
-  const defaultStore = {
-    queries: {},
-    components: {
-      text1: { id: "76cb237b-0de5-4081-9b9a-16098bf9d020" },
-      button1: { id: "21549d1a-c533-4671-92ac-bf20ed8c4dda" },
-    },
-    variables: {},
-  };
-  const [store, setStore] = useState(defaultStore);
-
-  useEffect(() => {
-    airtable();
-  }, []);
-
-  const airtable2 = () => {
-    let requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization:
-          "Bearer pat4YAtajn9F3yPPE.170024a050b69a38096ed9710577c07ef57d456ccf24290a4921ac7c24c5eb5b",
-      },
-    };
-    if (requestOptions.method !== "GET") {
-      requestOptions = resolveRequest(requestOptions);
-    }
-    setStore((store) => ({
-      ...store,
-      queries: {
-        ...store.queries,
-        ["airtable2"]: {
-          isLoading: true,
-          data: [],
-        },
-      },
-    }));
-    fetch(
-      resolveUrl(
-        `https://api.airtable.com/v0/appNWiL392zUHROpb/Opportunities/recBGlINojXAMUbKn`,
-        route
-      ),
-      requestOptions
-    ).then((data) => {
-      data.text().then((value) => {
-        const finalResult = JSON.parse(value);
-        setStore((store) => ({
-          ...store,
-          queries: {
-            ...store.queries,
-            ["airtable2"]: {
-              ...store.queries["airtable2"],
-              data: finalResult,
-              isLoading: false,
-            },
-          },
-        }));
-      });
-    });
-  };
-
-  const airtable1 = () => {
-    let requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization:
-          "Bearer pat4YAtajn9F3yPPE.170024a050b69a38096ed9710577c07ef57d456ccf24290a4921ac7c24c5eb5b",
-      },
-    };
-    if (requestOptions.method !== "GET") {
-      requestOptions = resolveRequest(requestOptions);
-    }
-    setStore((store) => ({
-      ...store,
-      queries: {
-        ...store.queries,
-        ["airtable1"]: {
-          isLoading: true,
-          data: [],
-        },
-      },
-    }));
-    fetch(
-      resolveUrl(
-        `https://api.airtable.com/v0/appNWiL392zUHROpb/Opportunities/{route?.params?.id}`,
-        route
-      ),
-      requestOptions
-    ).then((data) => {
-      data.text().then((value) => {
-        const finalResult = JSON.parse(value);
-        setStore((store) => ({
-          ...store,
-          queries: {
-            ...store.queries,
-            ["airtable1"]: {
-              ...store.queries["airtable1"],
-              data: finalResult,
-              isLoading: false,
-            },
-          },
-        }));
-      });
-    });
-  };
-
-  const airtable = () => {
-    let requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization:
-          "Bearer pat4YAtajn9F3yPPE.170024a050b69a38096ed9710577c07ef57d456ccf24290a4921ac7c24c5eb5b",
-      },
-    };
-    if (requestOptions.method !== "GET") {
-      requestOptions = resolveRequest(requestOptions);
-    }
-    setStore((store) => ({
-      ...store,
-      queries: {
-        ...store.queries,
-        ["airtable"]: {
-          isLoading: true,
-          data: [],
-        },
-      },
-    }));
-    fetch(
-      resolveUrl(
-        `https://api.airtable.com/v0/appNWiL392zUHROpb/Opportunities`,
-        route
-      ),
-      requestOptions
-    ).then((data) => {
-      data.text().then((value) => {
-        const finalResult = JSON.parse(value);
-        setStore((store) => ({
-          ...store,
-          queries: {
-            ...store.queries,
-            ["airtable"]: {
-              ...store.queries["airtable"],
-              data: finalResult,
-              isLoading: false,
-            },
-          },
-        }));
-      });
-    });
-  };
-
-  const changeStore = (comp, exposedVariable, value) => {
-    setStore((store) => ({
-      ...store,
-      components: {
-        ...store.components,
-        [comp]: {
-          ...store.components[comp],
-          [exposedVariable]: value,
-        },
-      },
-    }));
-  };
-
-  const changeStoreVariable = (key, value) => {
-    setStore((store) => ({
-      ...store,
-      variables: {
-        ...store.variables,
-        [key]: value,
-      },
-    }));
-  };
-
-  const resolveCode = (code, store, isJsCode) => {
-    if (!code.startsWith("store?.")) return code;
-    let result = "";
-    const evalFunction = Function(["store"], ` return ${code || ""} `);
-    result = evalFunction(isJsCode ? store : undefined);
-    return result;
-  };
-
-  function getDynamicVariables(text) {
-    const matchedParams = text.match(/{(.*?)}/g) || text.match(/%%(.*?)%%/g);
-    return matchedParams;
-  }
-
-  const resolveParamVar = (code, route, isJsCode) => {
-    console.log(route);
-    console.log(code);
-    let result = "";
-    code = code.replace(/[{()}]/g, "");
-    const evalFunction = Function(["route"], ` return ${code || ""} `);
-    console.log(evalFunction);
-    result = evalFunction(isJsCode ? route : undefined);
-
-    return result;
-  };
-
-  const resolveUrl = (url, route) => {
-    const containsVar = getDynamicVariables(url);
-    console.log(url);
-    if (!containsVar) return url;
-    for (const dynamicVariable of containsVar) {
-      value = resolveParamVar(dynamicVariable, route, true);
-      console.log(value, "value");
-      if (typeof value !== "function") {
-        url = url.replace(dynamicVariable, `${value}`);
-      }
-    }
-    console.log(url);
-    return url;
-  };
-
-  const resolveRequest = (request) => {
-    const body = JSON.parse(request.body);
-    Object.keys(body).map((item) => {
-      body[item] = resolveCode(body[item], store, true);
-    });
-    request.body = JSON.stringify(body);
-    return request;
-  };
-
-  const handleTextInputChange = (textField, value) => {
-    setStore((store) => ({
-      ...store,
-      components: {
-        ...store.components,
-        [textField]: {
-          ...store.components[textField],
-          value: value,
-        },
-      },
-    }));
-  };
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={{ paddingHorizontal: 20 }}>
-        {store?.queries?.airtable1?.data?.fields?.Status && (
-          <Text
-            style={{
-              margin: 20,
-              fontSize: 14,
-              textAlign: "left",
-              color: "#000000",
-              fontWeight: "normal",
-            }}
-          >
-            Text goessss {store?.queries?.airtable1?.data?.fields?.Status}
-          </Text>
-        )}
-        <View>
-          <TouchableOpacity
-            style={{
-              borderRadius: 10,
-              paddingVertical: 10,
-              paddingHorizontal: 30,
-              elevation: 2,
-              backgroundColor: "#4e3cf0",
-              marginVertical: 15,
-              alignSelf: "center",
-            }}
-            onPress={() => {
-              airtable1();
-            }}
-          >
-            <Text style={{ color: "#fff" }}>Button</Text>
-          </TouchableOpacity>
-        </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={store.components.modal1.show}
+          onRequestClose={() => {
+            changeStore("modal1", "show", false);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <CustomTextInput
+                defaultValue={store?.variables?.selectedItem?.name}
+                handleTextInputChange={handleTextInputChange}
+                componentName="textinput1"
+                placeholder="Placeholder text"
+              />
+              <View>
+                <TouchableOpacity
+                  style={{
+                    borderRadius: 10,
+                    paddingVertical: 10,
+                    paddingHorizontal: 30,
+                    elevation: 2,
+                    backgroundColor: "#4e3cf0",
+                    marginVertical: 15,
+                    alignSelf: "center",
+                  }}
+                  onPress={() => {
+                    change_name();
+                    getAllUsers();
+                    changeStore("modal1", "show", false);
+                  }}
+                >
+                  <Text style={{ color: "#fff" }}>Button</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
     </SafeAreaView>
   );
@@ -609,7 +369,6 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Users" component={UsersScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

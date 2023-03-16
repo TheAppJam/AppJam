@@ -231,6 +231,7 @@ const executeAction = (event, options) => {
             }
           })
         })
+        return
       }
 
       case 'navigate-screen': {
