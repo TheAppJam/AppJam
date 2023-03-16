@@ -19,6 +19,10 @@
   </a>
 </p>
 
+## Community
+If you have a question or would like to talk with other AppJam users and join our community, please hop over to [Discord server](https://discord.gg/SyYCfdD4)
+
+
 ## Contributing to AppJam
 From opening a bug report to creating a pull request: every contribution is appreciated and welcomed. If you'd like to contribute, start by reading our [Contribution Guide](CONTRIBUTING.md)
 
