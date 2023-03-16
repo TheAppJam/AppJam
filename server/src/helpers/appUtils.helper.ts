@@ -450,7 +450,7 @@ export function buildTemplate(config) {
 
   const currentDir = path.resolve(process.cwd());
 
-  fs.writeFileSync(`${currentDir}/App.js`, prettier.format(template));
+  // fs.writeFileSync(`${currentDir}/App.js`, prettier.format(template));
   // fs.writeFileSync(`${currentDir}/app.json`, prettier.format(appJson, {parser: "json"}));
   return template;
 }
