@@ -41,151 +41,16 @@ function HomeScreen({ route, navigation }) {
   const defaultStore = {
     queries: {},
     components: {
-      listview1: { id: "3af316bc-69ad-46a3-9211-ee055c1a4092" },
-      container1: { id: "5371edc6-bdad-4a1a-9c39-eb25e547d0b6" },
-      text1: { id: "f167e11d-dfb7-4690-9805-a85b65bc5c5d" },
-      modal1: { show: false, id: "0e17d030-ec20-448f-ac57-b6b27f11df1e" },
-      textinput1: {
-        value: "{{variables.selectedItem.name}}",
-        id: "0a648286-2da8-4dc3-b640-7feb1b25653b",
-      },
-      button1: { id: "fa31b895-363c-4e32-8909-926e5aa4cbfe" },
+      text1: { id: "b80ce42e-bf30-4f4e-9bf9-23fc83fdb03f" },
+      textinput1: { value: "", id: "aa6d72af-c2e9-4fbf-9397-451a87612e5a" },
+      button1: { id: "694fd167-ae54-4e53-b1cc-e08c0d482f55" },
+      listview1: { id: "6da60f34-dce1-4634-aa5d-b3cb55c0638d" },
     },
     variables: {},
   };
   const [store, setStore] = useState(defaultStore);
 
-  useEffect(() => {
-    getAllUsers();
-  }, []);
-
-  const change_name = () => {
-    let requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: '{"name":"store?.components?.textinput1?.value"}',
-    };
-    if (requestOptions.method !== "GET") {
-      requestOptions = resolveRequest(requestOptions);
-    }
-    setStore((store) => ({
-      ...store,
-      queries: {
-        ...store.queries,
-        ["change_name"]: {
-          isLoading: true,
-          data: [],
-        },
-      },
-    }));
-    fetch(
-      resolveUrl(
-        `https://63bba00f32d17a509093eebc.mockapi.io/api/v1/users/{store?.variables?.selectedItem?.id}`,
-        route,
-        store
-      ),
-      requestOptions
-    ).then((data) => {
-      data.text().then((value) => {
-        const finalResult = JSON.parse(value);
-        setStore((store) => ({
-          ...store,
-          queries: {
-            ...store.queries,
-            ["change_name"]: {
-              ...store.queries["change_name"],
-              data: finalResult,
-              isLoading: false,
-            },
-          },
-        }));
-      });
-    });
-  };
-
-  const getAllUsers = () => {
-    let requestOptions = { method: "GET", headers: {} };
-    if (requestOptions.method !== "GET") {
-      requestOptions = resolveRequest(requestOptions);
-    }
-    setStore((store) => ({
-      ...store,
-      queries: {
-        ...store.queries,
-        ["getAllUsers"]: {
-          isLoading: true,
-          data: [],
-        },
-      },
-    }));
-    fetch(
-      resolveUrl(
-        `https://63bba00f32d17a509093eebc.mockapi.io/users`,
-        route,
-        store
-      ),
-      requestOptions
-    ).then((data) => {
-      data.text().then((value) => {
-        const finalResult = JSON.parse(value);
-        setStore((store) => ({
-          ...store,
-          queries: {
-            ...store.queries,
-            ["getAllUsers"]: {
-              ...store.queries["getAllUsers"],
-              data: finalResult,
-              isLoading: false,
-            },
-          },
-        }));
-      });
-    });
-  };
-
-  const second_api = () => {
-    let requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: '{"name":"store?.components?.textinput1?.value"}',
-    };
-    if (requestOptions.method !== "GET") {
-      requestOptions = resolveRequest(requestOptions);
-    }
-    setStore((store) => ({
-      ...store,
-      queries: {
-        ...store.queries,
-        ["second_api"]: {
-          isLoading: true,
-          data: [],
-        },
-      },
-    }));
-    fetch(
-      resolveUrl(
-        `https://63bba00f32d17a509093eebc.mockapi.io/api/v1/users/1`,
-        route,
-        store
-      ),
-      requestOptions
-    ).then((data) => {
-      data.text().then((value) => {
-        const finalResult = JSON.parse(value);
-        setStore((store) => ({
-          ...store,
-          queries: {
-            ...store.queries,
-            ["second_api"]: {
-              ...store.queries["second_api"],
-              data: finalResult,
-              isLoading: false,
-            },
-          },
-        }));
-      });
-    });
-  };
+  useEffect(() => {}, []);
 
   const changeStore = (comp, exposedVariable, value) => {
     setStore((store) => ({
@@ -210,11 +75,11 @@ function HomeScreen({ route, navigation }) {
     }));
   };
 
-  const resolveCode = (code, store, isJsCode) => {
+  const resolveCode = (code, store) => {
     if (!code.startsWith("store?.")) return code;
     let result = "";
     const evalFunction = Function(["store"], ` return ${code || ""} `);
-    result = evalFunction(isJsCode ? store : undefined);
+    result = evalFunction(store);
     return result;
   };
 
@@ -223,14 +88,11 @@ function HomeScreen({ route, navigation }) {
     return matchedParams;
   }
 
-  const resolveParamVar = (code, route, store, isJsCode) => {
+  const resolveParamVar = (code, route, store) => {
     let result = "";
     code = code.replace(/[{()}]/g, "");
     const evalFunction = Function(["route", "store"], ` return ${code || ""} `);
-    result = evalFunction(
-      isJsCode ? route : undefined,
-      isJsCode ? store : undefined
-    );
+    result = evalFunction(route, store);
 
     return result;
   };
@@ -239,7 +101,7 @@ function HomeScreen({ route, navigation }) {
     const containsVar = getDynamicVariables(url);
     if (!containsVar) return url;
     for (const dynamicVariable of containsVar) {
-      value = resolveParamVar(dynamicVariable, route, store, true);
+      value = resolveParamVar(dynamicVariable, route, store);
       if (typeof value !== "function") {
         url = url.replace(dynamicVariable, `${value}`);
       }
@@ -250,7 +112,7 @@ function HomeScreen({ route, navigation }) {
   const resolveRequest = (request) => {
     const body = JSON.parse(request.body);
     Object.keys(body).map((item) => {
-      body[item] = resolveCode(body[item], store, true);
+      body[item] = resolveCode(body[item], store);
     });
     request.body = JSON.stringify(body);
     return request;
@@ -272,91 +134,41 @@ function HomeScreen({ route, navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={{ paddingHorizontal: 20 }}>
-        <FlatList
-          data={store?.queries?.getAllUsers?.data?.value}
-          renderItem={({ item }) => {
-            return (
-              <>
-                <Pressable
-                  onPress={() => {
-                    changeStore("modal1", "show", true);
-                    changeStoreVariable("selectedItem", item);
-                  }}
-                >
-                  <View
-                    style={{
-                      backgroundColor: "#fff",
-                      height: 112,
-                      borderRadius: 20,
-                      padding: 10,
-                      shadowColor: "#000",
-                      shadowOffset: {
-                        width: 0,
-                        height: 2,
-                      },
-                      shadowOpacity: 0.2,
-                      shadowRadius: 4,
-                      elevation: 2,
-                    }}
-                  >
-                    {item.name && (
-                      <Text
-                        style={{
-                          margin: 20,
-                          fontSize: 14,
-                          textAlign: "left",
-                          color: "#000000",
-                          fontWeight: "normal",
-                        }}
-                      >
-                        {item.name}
-                      </Text>
-                    )}
-                  </View>
-                </Pressable>
-              </>
-            );
-          }}
-        />
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={store.components.modal1.show}
-          onRequestClose={() => {
-            changeStore("modal1", "show", false);
+        <Text
+          style={{
+            margin: 20,
+            fontSize: 14,
+            textAlign: "left",
+            color: "#000000",
+            fontWeight: "normal",
           }}
         >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <CustomTextInput
-                defaultValue={store?.variables?.selectedItem?.name}
-                handleTextInputChange={handleTextInputChange}
-                componentName="textinput1"
-                placeholder="Placeholder text"
-              />
-              <View>
-                <TouchableOpacity
-                  style={{
-                    borderRadius: 10,
-                    paddingVertical: 10,
-                    paddingHorizontal: 30,
-                    elevation: 2,
-                    backgroundColor: "#4e3cf0",
-                    marginVertical: 15,
-                    alignSelf: "center",
-                  }}
-                  onPress={() => {
-                    change_name();
-                    getAllUsers();
-                    changeStore("modal1", "show", false);
-                  }}
-                >
-                  <Text style={{ color: "#fff" }}>Button</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
+          Text goessss !
+        </Text>
+        <CustomTextInput
+          defaultValue={""}
+          handleTextInputChange={handleTextInputChange}
+          componentName="textinput1"
+          placeholder="Placeholder text"
+        />
+        <View>
+          <TouchableOpacity
+            style={{
+              borderRadius: 10,
+              paddingVertical: 10,
+              paddingHorizontal: 30,
+              elevation: 2,
+              backgroundColor: "#4e3cf0",
+              marginVertical: 15,
+              alignSelf: "center",
+            }}
+            onPress={() => {
+              console.log();
+            }}
+          >
+            <Text style={{ color: "#fff" }}>Button</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

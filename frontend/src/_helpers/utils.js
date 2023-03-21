@@ -41,7 +41,7 @@ export const resolveReferences = (object, store, customObjects) => {
     case 'string': {
       if (object.startsWith('{{') && object.endsWith('}}')) {
         const code = object.replace('{{', '').replace('}}', '').split('.').join('?.');
-        return resolveCode(code, store, customObjects, true);
+        return resolveCode(code, store, customObjects);
       }
 
       const dynamicVariables = getDynamicVariables(object);
@@ -76,7 +76,7 @@ export const resolveReferences = (object, store, customObjects) => {
   }
 }
 
-const resolveCode = (code, store, customObjects = {}, isJsCode) => {
+const resolveCode = (code, store, customObjects = {}) => {
   let result = '';
   const evalFunction = Function(
     [
@@ -89,10 +89,10 @@ const resolveCode = (code, store, customObjects = {}, isJsCode) => {
     `return ${code || ''}`
   );
   result = evalFunction(
-    isJsCode ? store.queries : undefined,
-    isJsCode ? store.components : undefined,
-    isJsCode ? store.variables : undefined,
-    isJsCode ? store.params : undefined,
+    store.queries,
+    store.components,
+    store.variables,
+    store.params,
     ...Object.values(customObjects)
   );
   return result;
@@ -288,7 +288,7 @@ export function canShowHint(editor, ignoreBraces = false) {
 
   if (ignoreBraces && value.length > 0) return true;
 
-  return value.slice(ch, ch + 2) === '}}' || value.slice(ch, ch + 2) === '%%';
+  return value.slice(ch, ch + 2) === '}}';
 }
 
 export function computeCurrentWord(editor, _cursorPosition, ignoreBraces = false) {
@@ -341,30 +341,7 @@ function getResult(suggestionList, query) {
 
 export const getSuggestionKeys = (refState) => {
   const state = _.cloneDeep(refState);
-  const queries = state['queries'];
 
-  const actions = [
-    'runQuery',
-    'setVariable',
-    'unSetVariable',
-    'showAlert',
-    'logout',
-    'showModal',
-    'closeModal',
-    'setLocalStorage',
-    'copyToClipboard',
-    'goToApp',
-    'generateFile',
-  ];
-  
-  // eslint-disable-next-line no-unused-vars
-  _.forIn(queries, (query, key) => {
-    if (!query.hasOwnProperty('run')) {
-      query.run = true;
-    }
-  });
-
-  const currentState = _.merge(state, { queries });
   const suggestionList = [];
   const map = new Map();
 
@@ -397,11 +374,8 @@ export const getSuggestionKeys = (refState) => {
     });
   };
 
-  buildMap(currentState, '');
+  buildMap(state, '');
   map.forEach((__, key) => {
-    if (key.endsWith('run') && key.startsWith('queries')) {
-      return suggestionList.push(`${key}()`);
-    }
     return suggestionList.push(key);
   });
 
@@ -428,20 +402,13 @@ export function makeOverlay(style) {
   };
 }
 
-export function generateHints(word, suggestions, isEnvironmentVariable = false, fromRunJs) {
+export function generateHints(word, suggestions) {
   if (word === '') {
     return suggestions;
   }
   const hints = getResult(suggestions, word);
 
-  return hints.filter((hint) => {
-    if (isEnvironmentVariable) {
-      return hint.startsWith('client') || hint.startsWith('server');
-    } else {
-      if (fromRunJs) return hint;
-      return !hint.startsWith('client') && !hint.startsWith('server');
-    }
-  });
+  return hints
 }
 
 function keystrokeChecker(editor) {
@@ -463,13 +430,12 @@ export const handleChange = (editor, currentState, ignoreBraces = false) => {
   editor.addOverlay((state.overlay = makeOverlay(state.options.style)));
   const cursor = editor.getCursor();
   const currentWord = computeCurrentWord(editor, cursor.ch, false);
-  const isEnvironmentVariable = editor.getValue().startsWith('%%') ?? false;
   const hints =
-    currentWord !== '' ? generateHints(currentWord, suggestions, isEnvironmentVariable, false) : [];
+    currentWord !== '' ? generateHints(currentWord, suggestions) : [];
 
   const setCursorPosition = () => {
     const currentValue = editor.getValue();
-    if (currentValue.slice(-4) === '{{}}' || currentValue.slice(-4) === '%%') {
+    if (currentValue.slice(-4) === '{{}}') {
       editor.setCursor({ line: 0, ch: currentValue.length - 2 });
     }
   };

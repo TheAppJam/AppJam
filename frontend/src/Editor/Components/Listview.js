@@ -18,7 +18,7 @@ const Listview = ({
 
   return (
     <>
-      {(_.isArray(data) ? data : []).map((listItem, index) => {
+      {(_.isArray(data) ? data : ['']).map((listItem, index) => {
         return (
           <div
             key={index}

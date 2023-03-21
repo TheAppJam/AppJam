@@ -72,7 +72,7 @@ export const resolveVariable = (object) => {
       }
     }
     
-    return {variable: `store?.${code}`, isVariable: true, conditionVar: `store?.${code}`}
+    return {variable: `store?.${code}`, isVariable: true, conditionVar: false}
   }
 
   const dynamicVariables = getDynamicVariables(object);
@@ -329,7 +329,7 @@ const generateScreens = (screensOption) => {
         }))
       }
   
-      const resolveCode = (code, store, isJsCode) => {
+      const resolveCode = (code, store) => {
         if (!code.startsWith("store?.")) return code
         let result = '';
         const evalFunction = Function(
@@ -339,7 +339,7 @@ const generateScreens = (screensOption) => {
           \` return \${code || ''} \`
         );
         result = evalFunction(
-          isJsCode ? store : undefined
+          store
         );
         return result;
       }
@@ -349,11 +349,11 @@ const generateScreens = (screensOption) => {
         return matchedParams;
       }
 
-      const resolveParamVar = (code, route, store, isJsCode) => {
+      const resolveParamVar = (code, route, store) => {
         let result = "";
         code = code.replace(/[{()}]/g, '');
         const evalFunction = Function(["route", "store"], \` return \${code || ""} \`);
-        result = evalFunction(isJsCode ? route : undefined, isJsCode ? store : undefined);
+        result = evalFunction(route, store);
     
         return result;
     }
@@ -362,7 +362,7 @@ const generateScreens = (screensOption) => {
         const containsVar = getDynamicVariables(url)
         if (!containsVar) return url
         for (const dynamicVariable of containsVar) {
-            value = resolveParamVar(dynamicVariable, route, store, true);
+            value = resolveParamVar(dynamicVariable, route, store);
             if (typeof value !== 'function') {
               url = url.replace(dynamicVariable, \`\${value}\`);
             }
@@ -373,7 +373,7 @@ const generateScreens = (screensOption) => {
       const resolveRequest = (request) => {
         const body = JSON.parse(request.body)
         Object.keys(body).map((item) => {
-          body[item] = resolveCode(body[item], store, true)
+          body[item] = resolveCode(body[item], store)
         })
         request.body = JSON.stringify(body)
         return request

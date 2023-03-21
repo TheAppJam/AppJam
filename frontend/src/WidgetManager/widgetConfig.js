@@ -179,7 +179,7 @@ export const widgets = [
     definition: {
       properties: {
         data: {
-          value: [{}],
+          value: "",
         },
       },
       styles: {

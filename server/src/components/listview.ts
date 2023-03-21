@@ -4,12 +4,13 @@ import { resolveVariable } from 'src/helpers/appUtils.helper';
 
 export const listViewTemplate = (order, component, compDefinitions) => {
   const value = component.definition.properties.data.value
-  const childComp = order.components
+  const childComp = order.components || []
   const tt = childComp.map((item) => {
     const component = compDefinitions[item.id].component;
     return getUITemplate(item, component, compDefinitions);
   });
   const resolvedValue = resolveVariable(value)
+  if (resolvedValue.variable === '') return
   return (
     `<FlatList
       data={${resolvedValue.variable}}
